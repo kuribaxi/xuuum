@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>XOM TV – Alla Iranska Kanaler (dec 2025)</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{
+            font-family:Arial,sans-serif;
+            background:#1a1a2e;
+            color:white;
+            display:flex;
+            flex-direction:column;
+            height:100vh;
+            overflow:hidden;
+        }
+        .header{
+            background:#16213e;
+            padding:15px;
+            text-align:center;
+            border-bottom:4px solid #4ecdc4;
+            position:relative;
+            flex-shrink:0;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+        }
+        .header-top {
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            width:100%;
+            position:relative;
+            margin-bottom:8px;
+        }
+        .header h1{color:#4ecdc4;font-size:1.8em;margin:0;text-align:center;flex:1}
+        .warning{color:#ffcc00;font-size:0.9em;margin-top:8px;text-align:center}
+        
+        /* Filter-knappar */
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+            justify-content: center;
+            width: 100%;
+            max-width: 600px;
+        }
+        .filter-btn {
+            background: #0f3460;
+            color: white;
+            border: 2px solid #4ecdc4;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        .filter-btn:hover {
+            background: #4ecdc4;
+            color: #012;
+        }
+        .filter-btn.active {
+            background: #4ecdc4;
+            color: #012;
+            border-color: #4ecdc4;
+        }
+        
+        .container{
+            flex:1;
+            display:flex;
+            overflow:hidden;
+        }
+        .sidebar{
+            width:340px;
+            background:#0f3460;
+            overflow-y:auto;
+            padding:15px;
+            flex-shrink:0;
+        }
+        .section{
+            display: block; /* Alla sektioner visas från början */
+        }
+        .section.hidden {
+            display: none !important;
+        }
+        .section h3{
+            color:#4ecdc4;
+            margin:25px 0 12px 0;
+            font-size:1.2em;
+            border-bottom:2px solid #4ecdc4;
+            padding-bottom:6px;
+            display: block;
+        }
+        .channel{
+            background:#4ecdc4;
+            color:#000;
+            padding:10px 12px;
+            margin:6px 0;
+            border-radius:10px;
+            cursor:pointer;
+            font-weight:bold;
+            transition:.18s;
+            text-align:left;
+            font-size:1em;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+        .channel:hover{background:#45b7aa;transform:scale(1.02)}
+        .channel.active{background:#e74c3c;color:white}
+        .channel .label{flex:1;padding-right:8px}
+        
+        /* Karwan-länk stil */
+        .channel.karwan-link {
+            background: #8e44ad;
+            color: white;
+        }
+        .channel.karwan-link:hover {
+            background: #9b59b6;
+        }
+        
+        .fav{
+            background:transparent;
+            border:none;
+            font-size:1.1em;
+            cursor:pointer;
+            color:#012;
+            padding:4px;
+            line-height:1;
+        }
+        .fav.fav-active{color:#f5d259}
+        .player-area{
+            flex:1;
+            background:#000;
+            display:flex;
+            flex-direction:column;
+            min-height:0;
+            overflow:hidden;
+        }
+        .player-header{
+            background:#16213e;
+            padding:12px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            flex-shrink:0;
+        }
+        .player-header h2{
+            color:#4ecdc4;
+            font-size:1.5em;
+            margin:0;
+            flex:1;
+            text-align:center;
+        }
+        .player-controls {
+            display:flex;
+            gap:10px;
+            align-items:center;
+        }
+        .pip-btn {
+            background: #4ecdc4;
+            color: #012;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.9em;
+            white-space: nowrap;
+        }
+        .pip-btn:hover {
+            background: #45b7aa;
+        }
+        #player{
+            flex:1;
+            width:100%;
+            border:none;
+            min-height:0;
+            background:#000;
+        }
+
+        .menu-toggle{
+            display:none;
+            background:#4ecdc4;
+            color:#012;
+            border:none;
+            padding:8px 12px;
+            border-radius:6px;
+            font-weight:bold;
+            cursor:pointer;
+            font-size:1em;
+            z-index:1000;
+        }
+
+        @media(max-width:900px){
+            .container{
+                flex-direction:column;
+                height:auto;
+                min-height:0;
+            }
+
+            .player-area{
+                flex:0 0 auto;
+                height:70vh !important;
+                min-height:300px;
+                max-height:calc(100vh - 30vh);
+            }
+
+            .sidebar{
+                width:100%;
+                height:30vh !important;
+                min-height:200px;
+                max-height:calc(100vh - 70vh);
+                overflow-y:auto;
+                padding:10px;
+                position:relative;
+                display:none;
+            }
+
+            .header{
+                padding:12px 10px;
+            }
+            
+            .header-top {
+                flex-direction:row;
+                align-items:center;
+                justify-content:space-between;
+                margin-bottom:5px;
+            }
+            
+            .menu-toggle{
+                display:inline-block;
+                order:-1;
+                margin-right:10px;
+                padding:6px 10px;
+                font-size:0.9em;
+            }
+            
+            .header h1{
+                font-size:1.3em;
+                margin:0;
+                text-align:center;
+                flex:1;
+            }
+            
+            .warning{
+                font-size:0.75em;
+                margin-top:5px;
+                line-height:1.2;
+            }
+            
+            .filter-buttons {
+                gap: 5px;
+                margin-top: 8px;
+            }
+            .filter-btn {
+                padding: 6px 12px;
+                font-size: 0.8em;
+                flex: 1;
+                min-width: calc(25% - 5px);
+                text-align: center;
+            }
+
+            .player-header{
+                padding:10px;
+                flex-wrap:wrap;
+            }
+            
+            .player-header h2{
+                font-size:1.2em;
+                margin-bottom:5px;
+                order:1;
+                width:100%;
+                text-align:center;
+            }
+            
+            .player-controls{
+                order:2;
+                justify-content:center;
+                width:100%;
+                gap:15px;
+            }
+            
+            .pip-btn {
+                padding: 6px 10px;
+                font-size: 0.85em;
+                margin: 0;
+            }
+
+            .sidebar .section h3{
+                display:block;
+                margin:12px 0 6px 0;
+                font-size:1.1em;
+                padding-bottom:4px;
+                position:sticky;
+                top:0;
+                background:#0f3460;
+                z-index:10;
+            }
+
+            .channel{
+                margin:4px 0;
+                padding:8px 10px;
+                border-radius:8px;
+                font-size:0.95em;
+            }
+        }
+
+        @media(max-width:480px){
+            .player-area{
+                height:75vh !important;
+                min-height:280px;
+            }
+
+            .sidebar{
+                height:25vh !important;
+                min-height:180px;
+            }
+
+            .header h1{
+                font-size:1.2em;
+            }
+            
+            .menu-toggle{
+                padding:5px 8px;
+                font-size:0.8em;
+            }
+            
+            .filter-buttons {
+                flex-wrap: wrap;
+            }
+            .filter-btn {
+                font-size: 0.75em;
+                padding: 5px 8px;
+                min-width: calc(50% - 5px);
+            }
+            
+            .player-header h2{
+                font-size:1.1em;
+            }
+            
+            .pip-btn {
+                padding: 5px 8px;
+                font-size: 0.8em;
+            }
+            
+            .channel{
+                padding:7px 9px;
+                font-size:0.9em;
+            }
+        }
+
+        @media(max-width:900px) and (orientation: landscape){
+            .player-area{
+                height:80vh !important;
+                min-height:250px;
+            }
+            .sidebar{
+                height:20vh !important;
+                min-height:150px;
+            }
+            
+            .header h1{
+                font-size:1.1em;
+            }
+            
+            .warning{
+                font-size:0.7em;
+            }
+            
+            .filter-btn {
+                font-size: 0.7em;
+                padding: 4px 6px;
+            }
+            
+            .player-header h2{
+                font-size:1em;
+            }
+        }
+        
+        .mobile-header-info {
+            display:none;
+        }
+        
+        @media(max-width:900px){
+            .mobile-header-info {
+                display:block;
+                font-size:0.75em;
+                color:#4ecdc4;
+                margin-top:3px;
+                text-align:center;
+                font-style:italic;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-top">
+        <button class="menu-toggle" onclick="toggleSidebar()">📺 Visa kanaler</button>
+        <h1>XOM TV</h1>
+        <div style="width:80px"></div> <!-- Spacer for alignment -->
+    </div>
+    <p>Alla iranska TV-kanaler – fungerar perfekt</p>
+    <div class="filter-buttons">
+        <button class="filter-btn active" onclick="filterChannels('all')">Alla kanaler</button>
+        <button class="filter-btn" onclick="filterChannels('national')">1. Nationella kanaler</button>
+        <button class="filter-btn" onclick="filterChannels('regional')">2. Regionala kanaler</button>
+        <button class="filter-btn" onclick="filterChannels('kurdish')">3. Kurdiska kanaler</button>
+        <button class="filter-btn" onclick="filterChannels('karwan')">4. Karwan TV</button>
+    </div>
+    <p class="warning">Kör via lokal server → python -m http.server</p>
+    <p class="mobile-header-info">Klicka på "Visa kanaler" för att välja kanal</p>
+</div>
+
+<div class="container">
+    <div class="player-area">
+        <div class="player-header">
+            <h2 id="channelName">TV1</h2>
+            <div class="player-controls">
+                <button class="pip-btn" onclick="togglePictureInPicture(event)">📺 PiP</button>
+                <button class="pip-btn" onclick="toggleFullscreen()">⛶ Fullskärm</button>
+            </div>
+        </div>
+        <iframe
+            id="player"
+            src="https://m.telewebion.com/embed/live/tv1?autoplay=1&mute=0"
+            style="width:100%;height:100%;border:none;"
+            allowfullscreen
+            allow="autoplay *; encrypted-media *; picture-in-picture *; fullscreen *"
+            loading="eager"
+            sandbox="allow-scripts allow-same-origin allow-presentation">
+        </iframe>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="section" id="favSection">
+            <h3>Favoriter</h3>
+            <div id="favoritesList" style="color:#fff">Inga favoriter</div>
+        </div>
+
+        <div class="section" id="nationalSection">
+            <h3>Nationella Kanaler</h3>
+            <div class="channel active" onclick="load('tv1','TV1',this)">
+                <span class="label">TV1</span>
+                <button class="fav" onclick="toggleFav(event,'tv1','TV1',this)">☆</button>
+            </div>
+            <div class="channel" onclick="load('tv2','TV2',this)"><span class="label">TV2</span><button class="fav" onclick="toggleFav(event,'tv2','TV2',this)">☆</button></div>
+            <div class="channel" onclick="load('tv3','TV3',this)"><span class="label">TV3</span><button class="fav" onclick="toggleFav(event,'tv3','TV3',this)">☆</button></div>
+            <div class="channel" onclick="load('tv4','TV4',this)"><span class="label">TV4</span><button class="fav" onclick="toggleFav(event,'tv4','TV4',this)">☆</button></div>
+            <div class="channel" onclick="load('Tehran','Tehran',this)"><span class="label">Tehran</span><button class="fav" onclick="toggleFav(event,'Tehran','Tehran',this)">☆</button></div>
+            <div class="channel" onclick="load('nasim','NASIM',this)"><span class="label">NASIM</span><button class="fav" onclick="toggleFav(event,'nasim','NASIM',this)">☆</button></div>
+            <div class="channel" onclick="load('varzesh','VARZESH',this)"><span class="label">VARZESH (Sport)</span><button class="fav" onclick="toggleFav(event,'varzesh','VARZESH',this)">☆</button></div>
+            <div class="channel" onclick="load('irinn','IRINN / KHABAR',this)"><span class="label">IRINN / KHABAR</span><button class="fav" onclick="toggleFav(event,'irinn','IRINN / KHABAR',this)">☆</button></div>
+            <div class="channel" onclick="load('irinn2','KHABAR2',this)"><span class="label">KHABAR2</span><button class="fav" onclick="toggleFav(event,'irinn2','KHABAR2',this)">☆</button></div>
+            <div class="channel" onclick="load('ifilm','IFILM Farsi',this)"><span class="label">IFILM Farsi</span><button class="fav" onclick="toggleFav(event,'ifilm','IFILM Farsi',this)">☆</button></div>
+            <div class="channel" onclick="load('tv1plus','TV1PLUS',this)"><span class="label">TV1PLUS</span><button class="fav" onclick="toggleFav(event,'tv1plus','TV1PLUS',this)">☆</button></div>
+            <div class="channel" onclick="load('omid','OMID',this)"><span class="label">OMID</span><button class="fav" onclick="toggleFav(event,'omid','OMID',this)">☆</button></div>
+            <div class="channel" onclick="load('ifilmenglish','IFILM English',this)"><span class="label">IFILM English</span><button class="fav" onclick="toggleFav(event,'ifilmenglish','IFILM English',this)">☆</button></div>
+            <div class="channel" onclick="load('namayesh','NAMAYESH',this)"><span class="label">NAMAYESH</span><button class="fav" onclick="toggleFav(event,'namayesh','NAMAYESH',this)">☆</button></div>
+            <div class="channel" onclick="load('mostanad','MOSTANAD',this)"><span class="label">MOSTANAD</span><button class="fav" onclick="toggleFav(event,'mostanad','MOSTANAD',this)">☆</button></div>
+            <div class="channel" onclick="load('hdtest','TAMASHA',this)"><span class="label">TAMASHA</span><button class="fav" onclick="toggleFav(event,'hdtest','TAMASHA',this)">☆</button></div>
+            <div class="channel" onclick="load('amouzesh','AMOOZESH',this)"><span class="label">AMOOZESH</span><button class="fav" onclick="toggleFav(event,'amouzesh','AMOOZESH',this)">☆</button></div>
+            <div class="channel" onclick="load('salamat','SALAMAT',this)"><span class="label">SALAMAT</span><button class="fav" onclick="toggleFav(event,'salamat','SALAMAT',this)">☆</button></div>
+            <div class="channel" onclick="load('ofogh','OFOGH',this)"><span class="label">OFOGH</span><button class="fav" onclick="toggleFav(event,'ofogh','OFOGH',this)">☆</button></div>
+            <div class="channel" onclick="load('quran','QURAN TV',this)"><span class="label">QURAN TV</span><button class="fav" onclick="toggleFav(event,'quran','QURAN TV',this)">☆</button></div>
+            <div class="channel" onclick="load('pooya','POOYA & JAVANAN',this)"><span class="label">POOYA & JAVANAN</span><button class="fav" onclick="toggleFav(event,'pooya','POOYA & JAVANAN',this)">☆</button></div>
+            <div class="channel" onclick="load('javaneh','JAVANEH / KOODAK+',this)"><span class="label">JAVANEH / KOODAK+</span><button class="fav" onclick="toggleFav(event,'javaneh','JAVANEH / KOODAK+',this)">☆</button></div>
+            <div class="channel" onclick="load('sepehr','SEPEHR',this)"><span class="label">SEPEHR</span><button class="fav" onclick="toggleFav(event,'sepehr','SEPEHR',this)">☆</button></div>
+            <div class="channel" onclick="load('faratar','FARATAR',this)"><span class="label">FARATAR</span><button class="fav" onclick="toggleFav(event,'faratar','FARATAR',this)">☆</button></div>
+            <div class="channel" onclick="load('nava','NAVA',this)"><span class="label">NAVA</span><button class="fav" onclick="toggleFav(event,'nava','NAVA',this)">☆</button></div>
+            <div class="channel" onclick="load('nama','NAMA',this)"><span class="label">NAMA</span><button class="fav" onclick="toggleFav(event,'nama','NAMA',this)">☆</button></div>
+            <div class="channel" onclick="load('iribu','ROYA',this)"><span class="label">ROYA</span><button class="fav" onclick="toggleFav(event,'iribu','ROYA',this)">☆</button></div>
+            <div class="channel" onclick="load('ara','ARA',this)"><span class="label">ARA</span><button class="fav" onclick="toggleFav(event,'ara','ARA',this)">☆</button></div>
+            <div class="channel" onclick="load('iraneman','IRANEMAN',this)"><span class="label">IRANEMAN</span><button class="fav" onclick="toggleFav(event,'iraneman','IRANEMAN',this)">☆</button></div>
+            <div class="channel" onclick="load('golkhane','GOLKHANE',this)"><span class="label">GOLKHANE</span><button class="fav" onclick="toggleFav(event,'golkhane','GOLKHANE',this)">☆</button></div>
+            <div class="channel" onclick="load('negarestan','NEGARESTAN',this)"><span class="label">NEGARESTAN</span><button class="fav" onclick="toggleFav(event,'negarestan','NEGARESTAN',this)">☆</button></div>
+            <div class="channel" onclick="load('karoon','KAROON',this)"><span class="label">KAROON</span><button class="fav" onclick="toggleFav(event,'karoon','KAROON',this)">☆</button></div>
+            <div class="channel" onclick="load('sport3','TELEWEBION',this)"><span class="label">TELEWEBION</span><button class="fav" onclick="toggleFav(event,'sport3','TELEWEBION',this)">☆</button></div>
+            <div class="channel" onclick="load('sport1','TELEWEBION1',this)"><span class="label">TELEWEBION1</span><button class="fav" onclick="toggleFav(event,'sport1','TELEWEBION1',this)">☆</button></div>
+            <div class="channel" onclick="load('sport3','TELEWEBION2',this)"><span class="label">TELEWEBION2</span><button class="fav" onclick="toggleFav(event,'sport3','TELEWEBION2',this)">☆</button></div>
+            <div class="channel" onclick="load('parseh','PARSEH',this)"><span class="label">PARSEH</span><button class="fav" onclick="toggleFav(event,'parseh','PARSEH',this)">☆</button></div>
+            <div class="channel" onclick="load('nesfejahan','NESFEJAHAN',this)"><span class="label">NESFEJAHAN</span><button class="fav" onclick="toggleFav(event,'nesfejahan','NESFEJAHAN',this)">☆</button></div>
+            <div class="channel" onclick="load('sarbedaran','SARBEDARAN',this)"><span class="label">SARBEDARAN</span><button class="fav" onclick="toggleFav(event,'sarbedaran','SARBEDARAN',this)">☆</button></div>
+        </div>
+
+        <div class="section" id="regionalSection">
+            <h3>Regionala Kanaler</h3>
+            <div class="channel" onclick="load('mahabad','MAHABAD',this)"><span class="label">MAHABAD</span><button class="fav" onclick="toggleFav(event,'mahabad','MAHABAD',this)">☆</button></div>
+            <div class="channel" onclick="load('kordestan','KORDESTAN',this)"><span class="label">KORDESTAN</span><button class="fav" onclick="toggleFav(event,'kordestan','KORDESTAN',this)">☆</button></div>
+            <div class="channel" onclick="load('zagros','KERMANSHAH',this)"><span class="label">KERMANSHAH</span><button class="fav" onclick="toggleFav(event,'zagros','KERMANSHAH',this)">☆</button></div>
+            <div class="channel" onclick="load('ilam','ILAM',this)"><span class="label">ILAM</span><button class="fav" onclick="toggleFav(event,'ilam','ILAM',this)">☆</button></div>
+            <div class="channel" onclick="load('bushehr','BOOSHEHR',this)"><span class="label">BOOSHEHR</span><button class="fav" onclick="toggleFav(event,'bushehr','BOOSHEHR',this)">☆</button></div>
+            <div class="channel" onclick="load('abadan','ABADAN',this)"><span class="label">ABADAN</span><button class="fav" onclick="toggleFav(event,'abadan','ABADAN',this)">☆</button></div>
+            <div class="channel" onclick="load('khalijefars','BANDARABBAS',this)"><span class="label">BANDARABBAS</span><button class="fav" onclick="toggleFav(event,'khalijefars','BANDARABBAS',this)">☆</button></div>
+            <div class="channel" onclick="load('khoozestan','AHVAZ',this)"><span class="label">AHVAZ</span><button class="fav" onclick="toggleFav(event,'khoozestan','AHVAZ',this)">☆</button></div>
+            <div class="channel" onclick="load('kish','KISH',this)"><span class="label">KISH</span><button class="fav" onclick="toggleFav(event,'kish','KISH',this)">☆</button></div>
+            <div class="channel" onclick="load('hamoon','ZAHEDAN',this)"><span class="label">ZAHEDAN</span><button class="fav" onclick="toggleFav(event,'hamoon','ZAHEDAN',this)">☆</button></div>
+            <div class="channel" onclick="load('alborz','ALBORZ',this)"><span class="label">ALBORZ</span><button class="fav" onclick="toggleFav(event,'alborz','ALBORZ',this)">☆</button></div>
+            <div class="channel" onclick="load('aftab','ARAK',this)"><span class="label">ARAK</span><button class="fav" onclick="toggleFav(event,'aftab','ARAK',this)">☆</button></div>
+            <div class="channel" onclick="load('semnan','SEMNAN',this)"><span class="label">SEMNAN</span><button class="fav" onclick="toggleFav(event,'semnan','SEMNAN',this)">☆</button></div>
+            <div class="channel" onclick="load('noor','QOM',this)"><span class="label">QOM</span><button class="fav" onclick="toggleFav(event,'noor','QOM',this)">☆</button></div>
+            <div class="channel" onclick="load('qazvin','QAZVIN',this)"><span class="label">QAZVIN</span><button class="fav" onclick="toggleFav(event,'qazvin','QAZVIN',this)">☆</button></div>
+            <div class="channel" onclick="load('jahanbin','4Mahalebakhtiari',this)"><span class="label">4Mahalebakhtiari</span><button class="fav" onclick="toggleFav(event,'jahanbin','4Mahalebakhtiari',this)">☆</button></div>
+            <div class="channel" onclick="load('sina','HAMADAN',this)"><span class="label">HAMADAN</span><button class="fav" onclick="toggleFav(event,'sina','HAMADAN',this)">☆</button></div>
+            <div class="channel" onclick="load('aflak','LORESTAN',this)"><span class="label">LORESTAN</span><button class="fav" onclick="toggleFav(event,'aflak','LORESTAN',this)">☆</button></div>
+            <div class="channel" onclick="load('kerman','KERMAN',this)"><span class="label">KERMAN</span><button class="fav" onclick="toggleFav(event,'kerman','KERMAN',this)">☆</button></div>
+            <div class="channel" onclick="load('esfahan','ESFEHAN',this)"><span class="label">ESFEHAN</span><button class="fav" onclick="toggleFav(event,'esfahan','ESFEHAN',this)">☆</button></div>
+            <div class="channel" onclick="load('fars','FARS',this)"><span class="label">FARS</span><button class="fav" onclick="toggleFav(event,'fars','FARS',this)">☆</button></div>
+            <div class="channel" onclick="load('taban','YAZD',this)"><span class="label">YAZD</span><button class="fav" onclick="toggleFav(event,'taban','YAZD',this)">☆</button></div>
+            <div class="channel" onclick="load('dena','YASOOJ',this)"><span class="label">YASOOJ</span><button class="fav" onclick="toggleFav(event,'dena','YASOOJ',this)">☆</button></div>
+            <div class="channel" onclick="load('khavaran','KH.JONOBI',this)"><span class="label">KH.JONOBI</span><button class="fav" onclick="toggleFav(event,'khavaran','KH.JONOBI',this)">☆</button></div>
+            <div class="channel" onclick="load('atrak','KH.SHOMALI',this)"><span class="label">KK.SHOMALI</span><button class="fav" onclick="toggleFav(event,'atrak','KH.SHOMALI',this)">☆</button></div>
+            <div class="channel" onclick="load('khorasanrazavi','KH.RAZAVI',this)"><span class="label">KK.RAZAVI</span><button class="fav" onclick="toggleFav(event,'khorasanrazavi','KH.RAZAVI',this)">☆</button></div>
+            <div class="channel" onclick="load('sabz','GORGAN',this)"><span class="label">GORGAN</span><button class="fav" onclick="toggleFav(event,'sabz','GORGAN',this)">☆</button></div>
+            <div class="channel" onclick="load('tabarestan','MAZANDARAN',this)"><span class="label">MAZANDARAN</span><button class="fav" onclick="toggleFav(event,'tabarestan','MAZANDARAN',this)">☆</button></div>
+            <div class="channel" onclick="load('baran','GILAN',this)"><span class="label">GILAN</span><button class="fav" onclick="toggleFav(event,'baran','GILAN',this)">☆</button></div>
+            <div class="channel" onclick="load('sabalan','ARDABIL',this)"><span class="label">ARDABIL</span><button class="fav" onclick="toggleFav(event,'sabalan','ARDABIL',this)">☆</button></div>
+            <div class="channel" onclick="load('sahand','TABRIZ',this)"><span class="label">TABRIZ</span><button class="fav" onclick="toggleFav(event,'sahand','TABRIZ',this)">☆</button></div>
+            <div class="channel" onclick="load('azarbayjangharbi','URMIA',this)"><span class="label">URMIA</span><button class="fav" onclick="toggleFav(event,'azarbayjangharbi','URMIA',this)">☆</button></div>
+            <div class="channel" onclick="load('eshragh','ZANJAN',this)"><span class="label">ZANJAN</span><button class="fav" onclick="toggleFav(event,'eshragh','ZANJAN',this)">☆</button></div>
+        </div>
+
+        <!-- Kurdiska kanaler -->
+        <div class="section" id="kurdishSection">
+            <h3>Kurdiska Kanaler</h3>
+            <div class="channel" onclick="loadKurdish('zagros','Zagros', 'https://5a3ed7a72ed4b.streamlock.net/zagrostv/SMIL:myStream.smil/playlist.m3u8', this)"><span class="label">Zagros</span><button class="fav" onclick="toggleFav(event,'kurdish_zagros','Zagros',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('kanal8','Kanal8', 'https://live.channel8.com/Channel8-Kurdish/index.fmp4.m3u8', this)"><span class="label">Kanal8</span><button class="fav" onclick="toggleFav(event,'kurdish_kanal8','Kanal8',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('rudaw','Rudaw', 'https://svs.itworkscdn.net/rudawlive/rudawlive.smil/playlist.m3u8', this)"><span class="label">Rudaw</span><button class="fav" onclick="toggleFav(event,'kurdish_rudaw','Rudaw',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('kurdnews','Kurdsat News', 'https://hlspackager.akamaized.net/live/DB/KURDSAT_NEWS/HLS/KURDSAT_NEWS-avc1_1500000=10001.m3u8', this)"><span class="label">Kurdsat News</span><button class="fav" onclick="toggleFav(event,'kurdish_kurdnews','Kurdsat News',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('sterk','Sterk', 'https://5dab1db4b25fe.streamlock.net/sterk/sterktv/chunklist_w1084077249.m3u8', this)"><span class="label">Sterk</span><button class="fav" onclick="toggleFav(event,'kurdish_sterk','Sterk',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('nrt','NRT News', 'https://media.streambrothers.com:1936/8226/8226/playlist.m3u8', this)"><span class="label">NRT News</span><button class="fav" onclick="toggleFav(event,'kurdish_nrt','NRT News',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('kurdistan24','Karwan Kurdistan24', 'https://www.kurdistan24.net/ckb/live', this)"><span class="label">Karwan Kurdistan24</span><button class="fav" onclick="toggleFav(event,'kurdish_kurdistan24','Karwan Kurdistan24',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('kurdsatnews','Karwan Kurdsat News', 'https://news.kurdsat.tv/en/watch-live?zx=1760474096211&no_sw_cr=1', this)"><span class="label">Karwan Kurdsat News</span><button class="fav" onclick="toggleFav(event,'kurdish_kurdsatnews','Karwan Kurdsat News',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('4kurd','4 Kurd', 'https://4kuhls.persiana.live/hls/stream.m3u8', this)"><span class="label">4 Kurd</span><button class="fav" onclick="toggleFav(event,'kurdish_4kurd','4 Kurd',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('medmusic','Med Music', 'http://54.36.110.140/live3/live3.m3u8', this)"><span class="label">Med Music</span><button class="fav" onclick="toggleFav(event,'kurdish_medmusic','Med Music',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('aryen','Aryen', 'https://stream.aryen.tv/live/tv/chunklist_w189856026.m3u8', this)"><span class="label">Aryen</span><button class="fav" onclick="toggleFav(event,'kurdish_aryen','Aryen',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('cira','Cira', 'https://cira-tv.akamaized.net/hls/stream_0.m3u8', this)"><span class="label">Cira</span><button class="fav" onclick="toggleFav(event,'kurdish_cira','Cira',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('waar','Waar', 'https://live.kwikmotion.com/waarmedialive/waarmedia.smil/waarmediapublish/waarmedia_source/chunks.m3u8', this)"><span class="label">Waar</span><button class="fav" onclick="toggleFav(event,'kurdish_waar','Waar',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('rojava','Rojava', 'https://rojava-tv.akamaized.net/hls/rojava-tv.m3u8', this)"><span class="label">Rojava</span><button class="fav" onclick="toggleFav(event,'kurdish_rojava','Rojava',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('kurdhd','Kurdsat HD', 'https://hlspackager.akamaized.net/live/DB/KURDSAT_HD/HLS/KURDSAT_HD.m3u8', this)"><span class="label">Kurdsat HD</span><button class="fav" onclick="toggleFav(event,'kurdish_kurdhd','Kurdsat HD',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('kurdistantv','Kurdistan TV', 'https://5a3ed7a72ed4b.streamlock.net/live/SMIL:myStream.smil/playlist.m3u8', this)"><span class="label">Kurdistan TV</span><button class="fav" onclick="toggleFav(event,'kurdish_kurdistantv','Kurdistan TV',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('pdki','PDKI', 'https://cdn.northtelecom.org/KurdChannel.m3u8', this)"><span class="label">PDKI</span><button class="fav" onclick="toggleFav(event,'kurdish_pdki','PDKI',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('komala','Komala', 'https://live.tvkomala.com/live/komala/playlist.m3u8', this)"><span class="label">Komala</span><button class="fav" onclick="toggleFav(event,'kurdish_komala','Komala',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('gk','GK', 'https://live.host247.net/gk/gksat/playlist.m3u8', this)"><span class="label">GK</span><button class="fav" onclick="toggleFav(event,'kurdish_gk','GK',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('iribkurd','IRIB Kurdistan', 'https://lenz.splus.ir/PLTV/88888888/224/3221226647/index.m3u8', this)"><span class="label">IRIB Kurdistan</span><button class="fav" onclick="toggleFav(event,'kurdish_iribkurd','IRIB Kurdistan',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('sahar','Sahar', 'https://kurdish.sahartv.ir/live', this)"><span class="label">Sahar</span><button class="fav" onclick="toggleFav(event,'kurdish_sahar','Sahar',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('avatv','Ava TV', 'https://www.ava.news/livewatch?zx=1760476463185&no_sw_cr=1', this)"><span class="label">Ava TV</span><button class="fav" onclick="toggleFav(event,'kurdish_avatv','Ava TV',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('uthawler','UTV Hawler', 'https://utvhawler.net/index.htm', this)"><span class="label">UTV Hawler</span><button class="fav" onclick="toggleFav(event,'kurdish_uthawler','UTV Hawler',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('baxche','Baxche', 'https://5dcabf026b188.streamlock.net/afarinTV/livestream/playlist.m3u8', this)"><span class="label">Baxche</span><button class="fav" onclick="toggleFav(event,'kurdish_baxche','Baxche',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('afarinkids','Afarin Kids', 'https://65f16f0fdfc51.streamlock.net/afarinTV/livestream/playlist.m3u8', this)"><span class="label">Afarin Kids</span><button class="fav" onclick="toggleFav(event,'kurdish_afarinkids','Afarin Kids',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('zarokkurm','Zarok Kurmanci', 'https://zindikurmanci.zaroktv.com.tr/hls/0/stream.m3u8', this)"><span class="label">Zarok Kurmanci</span><button class="fav" onclick="toggleFav(event,'kurdish_zarokkurm','Zarok Kurmanci',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('zaroksor','Zarok Sorani', 'https://zindisorani.zaroktv.com.tr/hls/stream.m3u8', this)"><span class="label">Zarok Sorani</span><button class="fav" onclick="toggleFav(event,'kurdish_zaroksor','Zarok Sorani',this)">☆</button></div>
+        </div>
+
+        <!-- Karwan TV kanaler -->
+        <div class="section" id="karwanSection">
+            <h3>Karwan TV Kanaler</h3>
+            <div class="channel karwan-link" onclick="openKarwanLink('Karwan Mmn News', 'https://karwan.tv/mmn-news.html')"><span class="label">Karwan Mmn News</span><button class="fav" onclick="toggleFav(event,'karwan_mmnnews','Karwan Mmn News',this)">☆</button></div>
+            <div class="channel karwan-link" onclick="openKarwanLink('Karwan Shams TV', 'https://karwan.tv/shams-tv.html')"><span class="label">Karwan Shams TV</span><button class="fav" onclick="toggleFav(event,'karwan_shamstv','Karwan Shams TV',this)">☆</button></div>
+            <div class="channel karwan-link" onclick="openKarwanLink('Karwan Rudaw TV', 'https://karwan.tv/rudaw-tv.html')"><span class="label">Karwan Rudaw TV</span><button class="fav" onclick="toggleFav(event,'karwan_rudawtv','Karwan Rudaw TV',this)">☆</button></div>
+            <div class="channel karwan-link" onclick="openKarwanLink('Karwan Channel 8', 'https://karwan.tv/channel-8.html')"><span class="label">Karwan Channel 8</span><button class="fav" onclick="toggleFav(event,'karwan_channel8','Karwan Channel 8',this)">☆</button></div>
+            <div class="channel karwan-link" onclick="openKarwanLink('Karwan CPI TV', 'https://karwan.tv/cpi-tv.html')"><span class="label">Karwan CPI TV</span><button class="fav" onclick="toggleFav(event,'karwan_cpitv','Karwan CPI TV',this)">☆</button></div>
+            <div class="channel karwan-link" onclick="openKarwanLink('Karwan Duhok TV', 'https://karwan.tv/duhok-tv.html')"><span class="label">Karwan Duhok TV</span><button class="fav" onclick="toggleFav(event,'karwan_duhoktv','Karwan Duhok TV',this)">☆</button></div>
+            <div class="channel karwan-link" onclick="openKarwanLink('Karwan Geli Kurdistan TV', 'https://karwan.tv/geli-kurdistan-tv.html')"><span class="label">Karwan Geli Kurdistan TV</span><button class="fav" onclick="toggleFav(event,'karwan_gelikurdistan','Karwan Geli Kurdistan TV',this)">☆</button></div>
+            <div class="channel karwan-link" onclick="openKarwanLink('Karwan Kurdistan24 TV', 'https://karwan.tv/kurdistan24-tv.html')"><span class="label">Karwan Kurdistan24 TV</span><button class="fav" onclick="toggleFav(event,'karwan_kurdistan24tv','Karwan Kurdistan24 TV',this)">☆</button></div>
+            <div class="channel karwan-link" onclick="openKarwanLink('Karwan Nalia TV', 'https://karwan.tv/nalia-tv.html')"><span class="label">Karwan Nalia TV</span><button class="fav" onclick="toggleFav(event,'karwan_naliatv','Karwan Nalia TV',this)">☆</button></div>
+            <div class="channel karwan-link" onclick="openKarwanLink('Karwan Rojhelat TV', 'https://karwan.tv/rojhelat-tv.html')"><span class="label">Karwan Rojhelat TV</span><button class="fav" onclick="toggleFav(event,'karwan_rojhelattv','Karwan Rojhelat TV',this)">☆</button></div>
+            <div class="channel karwan-link" onclick="openKarwanLink('Karwan Slemani TV', 'https://karwan.tv/slemani-tv.html')"><span class="label">Karwan Slemani TV</span><button class="fav" onclick="toggleFav(event,'karwan_slemanitv','Karwan Slemani TV',this)">☆</button></div>
+            <div class="channel karwan-link" onclick="openKarwanLink('Karwan Xabir TV', 'https://karwan.tv/xabir-tv.html')"><span class="label">Karwan Xabir TV</span><button class="fav" onclick="toggleFav(event,'karwan_xabirtv','Karwan Xabir TV',this)">☆</button></div>
+            <div class="channel karwan-link" onclick="openKarwanLink('Karwan Kurdistan TV', 'https://karwan.tv/kurdistan-tv.html')"><span class="label">Karwan Kurdistan TV</span><button class="fav" onclick="toggleFav(event,'karwan_kurdistantv','Karwan Kurdistan TV',this)">☆</button></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const FAV_KEY = 'xom_favs';
+    let activeBtn = null;
+    let pipActive = false;
+    let currentFilter = 'all';
+
+    function getFavs() {
+        try {
+            const v = localStorage.getItem(FAV_KEY);
+            return v ? JSON.parse(v) : [];
+        } catch (e) {
+            return [];
+        }
+    }
+    function saveFavs(arr) {
+        localStorage.setItem(FAV_KEY, JSON.stringify(arr));
+    }
+    function isFav(id) {
+        return getFavs().indexOf(id) !== -1;
+    }
+
+    function toggleFav(event, id, name, btn) {
+        event.stopPropagation();
+        const favs = getFavs();
+        const idx = favs.indexOf(id);
+        if (idx === -1) {
+            favs.push(id);
+        } else {
+            favs.splice(idx,1);
+        }
+        saveFavs(favs);
+        updateStarButtons();
+        refreshFavoritesList();
+    }
+
+    function updateStarButtons() {
+        document.querySelectorAll('.channel').forEach(ch => {
+            const b = ch.querySelector('.fav');
+            if (!b) return;
+            // Försök hitta id från olika källor
+            let id = ch.dataset.id;
+            if (!id) {
+                // Kolla onclick attribut för vanliga kanaler
+                const onclickAttr = ch.getAttribute('onclick') || '';
+                if (onclickAttr.includes('load(')) {
+                    const m = onclickAttr.match(/load\(['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]/);
+                    id = m ? m[1] : null;
+                } else if (onclickAttr.includes('loadKurdish(')) {
+                    const m = onclickAttr.match(/loadKurdish\(['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]/);
+                    id = m ? 'kurdish_' + m[1] : null;
+                } else if (onclickAttr.includes('openKarwanLink(')) {
+                    const m = onclickAttr.match(/openKarwanLink\(['"]([^'"]+)['"]/);
+                    id = m ? 'karwan_' + m[1].toLowerCase().replace(/[^a-z0-9]/g, '') : null;
+                }
+            }
+            
+            if (id && isFav(id)) {
+                b.textContent = '★';
+                b.classList.add('fav-active');
+            } else {
+                b.textContent = '☆';
+                b.classList.remove('fav-active');
+            }
+        });
+    }
+
+    function refreshFavoritesList() {
+        const list = document.getElementById('favoritesList');
+        const favs = getFavs();
+        if (!favs || favs.length === 0) {
+            list.textContent = 'Inga favoriter';
+            return;
+        }
+        list.innerHTML = '';
+        favs.forEach(id => {
+            let label = id;
+            // Försök hitta matchande kanal
+            const channelEl = Array.from(document.querySelectorAll('.channel')).find(ch => {
+                // Kolla dataset.id först
+                if (ch.dataset.id && ch.dataset.id === id) {
+                    return true;
+                }
+                // Kolla onclick attribut
+                const onclickAttr = ch.getAttribute('onclick') || '';
+                if (onclickAttr.includes('load(')) {
+                    const m = onclickAttr.match(/load\(['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]/);
+                    if (m && m[1] === id) return true;
+                }
+                if (onclickAttr.includes('loadKurdish(')) {
+                    const m = onclickAttr.match(/loadKurdish\(['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]/);
+                    if (m && ('kurdish_' + m[1]) === id) return true;
+                }
+                if (onclickAttr.includes('openKarwanLink(')) {
+                    const m = onclickAttr.match(/openKarwanLink\(['"]([^'"]+)['"]/);
+                    if (m && ('karwan_' + m[1].toLowerCase().replace(/[^a-z0-9]/g, '')) === id) return true;
+                }
+                return false;
+            });
+            
+            if (channelEl) {
+                label = channelEl.querySelector('.label')?.textContent.trim() || id;
+            }
+            const btn = document.createElement('button');
+            btn.textContent = label;
+            btn.style.display = 'block';
+            btn.style.width = '100%';
+            btn.style.margin = '6px 0';
+            btn.style.padding = '8px';
+            btn.style.borderRadius = '8px';
+            btn.style.border = 'none';
+            btn.style.background = '#4ecdc4';
+            btn.style.color = '#012';
+            btn.style.fontWeight = 'bold';
+            btn.style.fontSize = '0.9em';
+            btn.onclick = () => {
+                if (channelEl) channelEl.click();
+                // Stäng sidebar på mobil efter val
+                if (window.innerWidth <= 900) {
+                    setTimeout(() => toggleSidebar(), 300);
+                }
+            };
+            list.appendChild(btn);
+        });
+    }
+
+    function filterChannels(filter) {
+        currentFilter = filter;
+        
+        // Uppdatera filter-knappar
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        event.target.classList.add('active');
+        
+        // Visa/dölj sektioner baserat på filter
+        const sections = {
+            'nationalSection': filter === 'all' || filter === 'national',
+            'regionalSection': filter === 'all' || filter === 'regional',
+            'kurdishSection': filter === 'all' || filter === 'kurdish',
+            'karwanSection': filter === 'all' || filter === 'karwan',
+            'favSection': true // Alltid visa favoriter
+        };
+        
+        for (const [sectionId, shouldShow] of Object.entries(sections)) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                if (shouldShow) {
+                    section.classList.remove('hidden');
+                } else {
+                    section.classList.add('hidden');
+                }
+            }
+        }
+    }
+
+    async function togglePictureInPicture(event) {
+        const player = document.getElementById('player');
+        const btn = event ? event.target : document.querySelector('.pip-btn');
+        
+        try {
+            if (document.pictureInPictureElement) {
+                // Avsluta PiP
+                await document.exitPictureInPicture();
+                pipActive = false;
+                btn.textContent = '📺 PiP';
+            } else {
+                // Starta PiP
+                await player.requestPictureInPicture();
+                pipActive = true;
+                btn.textContent = '🖥️ Normal';
+            }
+        } catch (e) {
+            // Fallback: öppna i nytt fönster som också uppdateras
+            window.open(player.src, '_blank');
+        }
+    }
+    
+    function toggleFullscreen() {
+        const player = document.getElementById('player');
+        if (player.requestFullscreen) {
+            player.requestFullscreen();
+        } else if (player.webkitRequestFullscreen) {
+            player.webkitRequestFullscreen();
+        } else if (player.mozRequestFullScreen) {
+            player.mozRequestFullScreen();
+        } else if (player.msRequestFullscreen) {
+            player.msRequestFullscreen();
+        }
+    }
+
+    function load(id, name, btn) {
+        const player = document.getElementById('player');
+        const nameEl = document.getElementById('channelName');
+
+        // Stark autoplay + tvinga reload för direkt uppspelning
+        const newSrc = `https://m.telewebion.com/embed/live/${id}?autoplay=1&mute=0&start=0&_=${Date.now()}`;
+        
+        // OM PiP är aktiv → uppdatera direkt i PiP-fönstret
+        if (pipActive && document.pictureInPictureElement) {
+            player.src = newSrc;
+            // Försök att tvinga reload i PiP-fönstret
+            try {
+                if (player.contentWindow && player.contentWindow.location) {
+                    player.contentWindow.location.replace(newSrc);
+                }
+            } catch (e) {
+                // Cross-origin error, fortsätt normalt
+                player.src = newSrc;
+                player.src = newSrc; // Dubbel set för att tvinga reload
+            }
+        } else {
+            player.src = newSrc;
+            player.src = newSrc; // Dubbel set för att tvinga reload
+        }
+        
+        nameEl.textContent = name;
+
+        if (activeBtn) activeBtn.classList.remove('active');
+        const ch = (btn && btn.classList && btn.classList.contains('channel')) ? btn : (btn && btn.closest ? btn.closest('.channel') : null);
+        if (ch) {
+            ch.classList.add('active');
+            activeBtn = ch;
+            if (window.innerWidth <= 900) {
+                setTimeout(() => {
+                    ch.scrollIntoView({behavior: 'smooth', block: 'center'});
+                }, 300);
+            }
+        } else {
+            const found = Array.from(document.querySelectorAll('.channel')).find(c => {
+                // Kolla onclick attribut
+                const onclickAttr = c.getAttribute('onclick') || '';
+                if (onclickAttr.includes('load(')) {
+                    const m = onclickAttr.match(/load\(['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]/);
+                    return m && m[1] === id;
+                }
+                return false;
+            });
+            if (found) {
+                found.classList.add('active');
+                activeBtn = found;
+                if (window.innerWidth <= 900) {
+                    setTimeout(() => {
+                        found.scrollIntoView({behavior: 'smooth', block: 'center'});
+                    }, 300);
+                }
+            }
+        }
+        
+        // Uppdatera meny-knappens text på mobil
+        if (window.innerWidth <= 900) {
+            const menuBtn = document.querySelector('.menu-toggle');
+            menuBtn.textContent = '✕ Stäng lista';
+        }
+    }
+
+    function loadKurdish(id, name, url, btn) {
+        const player = document.getElementById('player');
+        const nameEl = document.getElementById('channelName');
+        
+        // För HLS streams, använd en HLS-spelare eller direkt länk
+        // Vi använder en enkel iframe med direkt URL
+        const newSrc = url;
+        
+        player.src = newSrc;
+        nameEl.textContent = name;
+
+        if (activeBtn) activeBtn.classList.remove('active');
+        if (btn) {
+            btn.classList.add('active');
+            activeBtn = btn;
+            if (window.innerWidth <= 900) {
+                setTimeout(() => {
+                    btn.scrollIntoView({behavior: 'smooth', block: 'center'});
+                }, 300);
+            }
+        }
+        
+        // Uppdatera meny-knappens text på mobil
+        if (window.innerWidth <= 900) {
+            const menuBtn = document.querySelector('.menu-toggle');
+            menuBtn.textContent = '✕ Stäng lista';
+        }
+    }
+
+    function openKarwanLink(name, url) {
+        // Öppna i nytt fönster med blockerade annonser
+        // Vi använder ett enkelt proxy-liknande tillvägagångssätt genom att öppna i nytt fönster
+        // För att undvika adblock-detection kan vi lägga till en random parameter
+        const randomParam = `_=${Date.now()}&nocache=1&no_ads=1`;
+        const separator = url.includes('?') ? '&' : '?';
+        const finalUrl = url + separator + randomParam;
+        
+        // Öppna i nytt fönster
+        const newWindow = window.open(finalUrl, '_blank', 'noopener,noreferrer');
+        if (newWindow) {
+            newWindow.focus();
+        }
+        
+        // Stäng sidebar på mobil
+        if (window.innerWidth <= 900) {
+            setTimeout(() => toggleSidebar(), 300);
+        }
+    }
+
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const playerArea = document.querySelector('.player-area');
+        const btn = document.querySelector('.menu-toggle');
+        const isMobile = window.innerWidth <= 900;
+
+        // OM gömd → visa
+        if (sidebar.style.display === 'none' || sidebar.style.display === '') {
+            sidebar.style.display = 'block';
+            if (isMobile) {
+                playerArea.style.height = '30vh';
+                btn.textContent = '✕ Stäng lista';
+                // Scrolla till aktiv kanal
+                if (activeBtn) {
+                    setTimeout(() => {
+                        activeBtn.scrollIntoView({behavior: 'smooth', block: 'center'});
+                    }, 100);
+                }
+            } else {
+                playerArea.style.height = 'auto';
+            }
+        } else {
+            // OM synlig → göm
+            sidebar.style.display = 'none';
+            if (isMobile) {
+                playerArea.style.height = '100vh';
+                btn.textContent = '📺 Visa kanaler';
+            }
+        }
+    }
+
+    window.addEventListener('resize', function() {
+        const sidebar = document.getElementById('sidebar');
+        const playerArea = document.querySelector('.player-area');
+        const btn = document.querySelector('.menu-toggle');
+        const isMobile = window.innerWidth <= 900;
+
+        if (!isMobile) {
+            // Desktop: alltid visa sidebar
+            sidebar.style.display = 'block';
+            playerArea.style.height = 'auto';
+            btn.textContent = '≡';
+            btn.style.display = 'none';
+        } else {
+            // Mobil: visa eller dölj baserat på state
+            btn.style.display = 'inline-block';
+            if (sidebar.style.display === 'none' || sidebar.style.display === '') {
+                playerArea.style.height = '100vh';
+                btn.textContent = '📺 Visa kanaler';
+            } else {
+                playerArea.style.height = '30vh';
+                btn.textContent = '✕ Stäng lista';
+            }
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Lägg till dataset.id på alla kanaler för bättre fav-hantering
+        document.querySelectorAll('.channel').forEach((ch, index) => {
+            const onclickAttr = ch.getAttribute('onclick') || '';
+            let id = ch.dataset.id;
+            
+            if (!id) {
+                if (onclickAttr.includes('load(')) {
+                    const m = onclickAttr.match(/load\(['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]/);
+                    id = m ? m[1] : `channel_${index}`;
+                } else if (onclickAttr.includes('loadKurdish(')) {
+                    const m = onclickAttr.match(/loadKurdish\(['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]/);
+                    id = m ? 'kurdish_' + m[1] : `kurdish_${index}`;
+                } else if (onclickAttr.includes('openKarwanLink(')) {
+                    const m = onclickAttr.match(/openKarwanLink\(['"]([^'"]+)['"]/);
+                    id = m ? 'karwan_' + m[1].toLowerCase().replace(/[^a-z0-9]/g, '') : `karwan_${index}`;
+                } else {
+                    id = `channel_${index}`;
+                }
+            }
+            
+            ch.dataset.id = id;
+            
+            // Lägg till namn också om det inte finns
+            if (!ch.dataset.name) {
+                const label = ch.querySelector('.label');
+                if (label) {
+                    ch.dataset.name = label.textContent.trim();
+                }
+            }
+        });
+
+        updateStarButtons();
+        refreshFavoritesList();
+
+        const initial = document.querySelector('.channel.active');
+        if (initial) initial.click();
+
+        // På mobil: börja med stor spelare och gömd lista
+        if (window.innerWidth <= 900) {
+            const sidebar = document.getElementById('sidebar');
+            const playerArea = document.querySelector('.player-area');
+            const btn = document.querySelector('.menu-toggle');
+            sidebar.style.display = 'none';
+            playerArea.style.height = '100vh';
+            btn.textContent = '📺 Visa kanaler';
+            btn.style.display = 'inline-block';
+        } else {
+            // Desktop: dölj meny-knapp
+            document.querySelector('.menu-toggle').style.display = 'none';
+        }
+        
+        // Aktivera "Alla kanaler" filter som standard
+        filterChannels('all');
+    });
+
+    // Stäng sidebar när man klickar utanför (på mobil)
+    document.addEventListener('click', function(event) {
+        const sidebar = document.getElementById('sidebar');
+        const menuBtn = document.querySelector('.menu-toggle');
+        const isMobile = window.innerWidth <= 900;
+        
+        if (isMobile && sidebar.style.display === 'block') {
+            // Kolla om klicket är utanför sidebar och inte på kanal eller meny-knapp
+            if (!sidebar.contains(event.target) && 
+                !menuBtn.contains(event.target) && 
+                !event.target.classList.contains('channel') &&
+                !event.target.closest('.channel')) {
+                toggleSidebar();
+            }
+        }
+    });
+
+    // Exponera funktioner för globalt bruk
+    window.toggleFav = toggleFav;
+    window.load = load;
+    window.loadKurdish = loadKurdish;
+    window.openKarwanLink = openKarwanLink;
+    window.filterChannels = filterChannels;
+    window.toggleSidebar = toggleSidebar;
+    window.togglePictureInPicture = togglePictureInPicture;
+    window.toggleFullscreen = toggleFullscreen;
+</script>
+
+</body>
+</html>
