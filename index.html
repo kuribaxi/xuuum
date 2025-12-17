@@ -458,10 +458,11 @@
             <div class="channel" onclick="load('irinn','IRINN / KHABAR',this)"><span class="label">IRINN / KHABAR</span><button class="fav" onclick="toggleFav(event,'irinn','IRINN / KHABAR',this)">☆</button></div>
             <div class="channel" onclick="load('irinn2','KHABAR2',this)"><span class="label">KHABAR2</span><button class="fav" onclick="toggleFav(event,'irinn2','KHABAR2',this)">☆</button></div>
             <div class="channel" onclick="load('ifilm','IFILM Farsi',this)"><span class="label">IFILM Farsi</span><button class="fav" onclick="toggleFav(event,'ifilm','IFILM Farsi',this)">☆</button></div>
-            <div class="channel" onclick="load('ifilmdari','IFILM Dari',this)"><span class="label">IFILM Dari</span><button class="fav" onclick="toggleFav(event,'ifilmdari','IFILM Dari',this)">☆</button></div>
+            <div class="channel" onclick="loadIfilm('ifilmdari','IFILM Dari', 'https://live.presstv.ir/hls/ifilm2.m3u8', this)"><span class="label">IFILM Dari</span><button class="fav" onclick="toggleFav(event,'ifilmdari','IFILM Dari',this)">☆</button></div>
+            <div class="channel" onclick="loadIfilm('ifilmen','IFILM English', 'https://live.presstv.ir/hls/ifilmen.m3u8', this)"><span class="label">IFILM English</span><button class="fav" onclick="toggleFav(event,'ifilmen','IFILM English',this)">☆</button></div>
+            <div class="channel" onclick="loadIfilm('ifilmar','IFILM Arabic', 'https://live.presstv.ir/hls/ifilmar.m3u8', this)"><span class="label">IFILM Arabic</span><button class="fav" onclick="toggleFav(event,'ifilmar','IFILM Arabic',this)">☆</button></div>
             <div class="channel" onclick="load('tv1plus','TV1PLUS',this)"><span class="label">TV1PLUS</span><button class="fav" onclick="toggleFav(event,'tv1plus','TV1PLUS',this)">☆</button></div>
             <div class="channel" onclick="load('omid','OMID',this)"><span class="label">OMID</span><button class="fav" onclick="toggleFav(event,'omid','OMID',this)">☆</button></div>
-            <div class="channel" onclick="load('ifilmenglish','IFILM English',this)"><span class="label">IFILM English</span><button class="fav" onclick="toggleFav(event,'ifilmenglish','IFILM English',this)">☆</button></div>
             <div class="channel" onclick="load('namayesh','NAMAYESH',this)"><span class="label">NAMAYESH</span><button class="fav" onclick="toggleFav(event,'namayesh','NAMAYESH',this)">☆</button></div>
             <div class="channel" onclick="load('mostanad','MOSTANAD',this)"><span class="label">MOSTANAD</span><button class="fav" onclick="toggleFav(event,'mostanad','MOSTANAD',this)">☆</button></div>
             <div class="channel" onclick="load('hdtest','TAMASHA',this)"><span class="label">TAMASHA</span><button class="fav" onclick="toggleFav(event,'hdtest','TAMASHA',this)">☆</button></div>
@@ -535,8 +536,6 @@
             <div class="channel" onclick="loadKurdish('kurdnews','Kurdsat News', 'https://hlspackager.akamaized.net/live/DB/KURDSAT_NEWS/HLS/KURDSAT_NEWS.m3u8', this)"><span class="label">Kurdsat News</span><button class="fav" onclick="toggleFav(event,'kurdish_kurdnews','Kurdsat News',this)">☆</button></div>
             <div class="channel" onclick="loadKurdish('sterk','Sterk', 'https://5dab1db4b25fe.streamlock.net/sterk/sterktv/chunklist_w1084077249.m3u8', this)"><span class="label">Sterk</span><button class="fav" onclick="toggleFav(event,'kurdish_sterk','Sterk',this)">☆</button></div>
             <div class="channel" onclick="loadKurdish('nrt','NRT News', 'https://media.streambrothers.com:1936/8226/8226/playlist.m3u8', this)"><span class="label">NRT News</span><button class="fav" onclick="toggleFav(event,'kurdish_nrt','NRT News',this)">☆</button></div>
-            <div class="channel" onclick="loadKurdish('kurdistan24','Karwan Kurdistan24', 'https://d1x82nydcxndze.cloudfront.net/live/index_720p25.m3u8', this)"><span class="label">Karwan Kurdistan24</span><button class="fav" onclick="toggleFav(event,'kurdish_kurdistan24','Karwan Kurdistan24',this)">☆</button></div>
-            <div class="channel" onclick="loadKurdish('kurdsatnews','Karwan Kurdsat News', 'https://news.kurdsat.tv/en/watch-live?zx=1760474096211&no_sw_cr=1', this)"><span class="label">Karwan Kurdsat News</span><button class="fav" onclick="toggleFav(event,'kurdish_kurdsatnews','Karwan Kurdsat News',this)">☆</button></div>
             <div class="channel" onclick="loadKurdish('4kurd','4 Kurd', 'https://4kuhls.persiana.live/hls/stream.m3u8', this)"><span class="label">4 Kurd</span><button class="fav" onclick="toggleFav(event,'kurdish_4kurd','4 Kurd',this)">☆</button></div>
             <div class="channel" onclick="loadKurdish('medmusic','Med Music', 'http://54.36.110.140/live3/live3.m3u8', this)"><span class="label">Med Music</span><button class="fav" onclick="toggleFav(event,'kurdish_medmusic','Med Music',this)">☆</button></div>
             <div class="channel" onclick="loadKurdish('aryen','Aryen', 'https://stream.aryen.tv/live/tv/chunklist_w189856026.m3u8', this)"><span class="label">Aryen</span><button class="fav" onclick="toggleFav(event,'kurdish_aryen','Aryen',this)">☆</button></div>
@@ -551,7 +550,7 @@
             <div class="channel" onclick="loadKurdish('iribkurd','IRIB Kurdistan', 'https://lenz.splus.ir/PLTV/88888888/224/3221226647/index.m3u8', this)"><span class="label">IRIB Kurdistan</span><button class="fav" onclick="toggleFav(event,'kurdish_iribkurd','IRIB Kurdistan',this)">☆</button></div>
             <div class="channel" onclick="loadKurdish('sahar','Sahar', 'https://kurdish.sahartv.ir/live', this)"><span class="label">Sahar</span><button class="fav" onclick="toggleFav(event,'kurdish_sahar','Sahar',this)">☆</button></div>
             <div class="channel" onclick="loadKurdish('avatv','Ava TV', 'https://www.ava.news/livewatch', this)"><span class="label">Ava TV</span><button class="fav" onclick="toggleFav(event,'kurdish_avatv','Ava TV',this)">☆</button></div>
-            <div class="channel" onclick="loadKurdish('uthawler','UTV Hawler', 'https://ok.ru/live/4728653618791', this)"><span class="label">UTV Hawler</span><button class="fav" onclick="toggleFav(event,'kurdish_uthawler','UTV Hawler',this)">☆</button></div>
+            <div class="channel" onclick="loadKurdish('uthawler','UTV Hawler', 'https://utvhawler.net/index.htm', this)"><span class="label">UTV Hawler</span><button class="fav" onclick="toggleFav(event,'kurdish_uthawler','UTV Hawler',this)">☆</button></div>
             <div class="channel" onclick="loadKurdish('baxche','Baxche', 'https://5dcabf026b188.streamlock.net/afarinTV/livestream/playlist.m3u8', this)"><span class="label">Baxche</span><button class="fav" onclick="toggleFav(event,'kurdish_baxche','Baxche',this)">☆</button></div>
             <div class="channel" onclick="loadKurdish('afarinkids','Afarin Kids', 'https://65f16f0fdfc51.streamlock.net/afarinTV/livestream/playlist.m3u8', this)"><span class="label">Afarin Kids</span><button class="fav" onclick="toggleFav(event,'kurdish_afarinkids','Afarin Kids',this)">☆</button></div>
             <div class="channel" onclick="loadKurdish('zarokkurm','Zarok Kurmanci', 'https://zindikurmanci.zaroktv.com.tr/hls/0/stream.m3u8', this)"><span class="label">Zarok Kurmanci</span><button class="fav" onclick="toggleFav(event,'kurdish_zarokkurm','Zarok Kurmanci',this)">☆</button></div>
@@ -625,9 +624,9 @@
                 if (onclickAttr.includes('load(')) {
                     const m = onclickAttr.match(/load\(['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]/);
                     id = m ? m[1] : null;
-                } else if (onclickAttr.includes('loadKurdish(')) {
-                    const m = onclickAttr.match(/loadKurdish\(['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]/);
-                    id = m ? 'kurdish_' + m[1] : null;
+                } else if (onclickAttr.includes('loadKurdish(') || onclickAttr.includes('loadIfilm(')) {
+                    const m = onclickAttr.match(/load(Kurdish|Ifilm)\(['"]([^'"]+)['"]/);
+                    id = m ? m[1].toLowerCase() + '_' + m[2] : null;
                 } else if (onclickAttr.includes('openKarwanLink(')) {
                     const m = onclickAttr.match(/openKarwanLink\(['"]([^'"]+)['"]/);
                     id = m ? 'karwan_' + m[1].toLowerCase().replace(/[^a-z0-9]/g, '') : null;
@@ -666,9 +665,9 @@
                     const m = onclickAttr.match(/load\(['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]/);
                     if (m && m[1] === id) return true;
                 }
-                if (onclickAttr.includes('loadKurdish(')) {
-                    const m = onclickAttr.match(/loadKurdish\(['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]/);
-                    if (m && ('kurdish_' + m[1]) === id) return true;
+                if (onclickAttr.includes('loadKurdish(') || onclickAttr.includes('loadIfilm(')) {
+                    const m = onclickAttr.match(/load(Kurdish|Ifilm)\(['"]([^'"]+)['"]/);
+                    if (m && (m[1].toLowerCase() + '_' + m[2]) === id) return true;
                 }
                 if (onclickAttr.includes('openKarwanLink(')) {
                     const m = onclickAttr.match(/openKarwanLink\(['"]([^'"]+)['"]/);
@@ -833,13 +832,48 @@
         }
     }
 
+    // Ny funktion för Ifilm-kanaler
+    function loadIfilm(id, name, url, btn) {
+        const player = document.getElementById('player');
+        const nameEl = document.getElementById('channelName');
+        
+        // För Ifilm-kanaler, använd direkt HLS-länken
+        const newSrc = url;
+        
+        player.src = newSrc;
+        nameEl.textContent = name;
+
+        if (activeBtn) activeBtn.classList.remove('active');
+        if (btn) {
+            btn.classList.add('active');
+            activeBtn = btn;
+            if (window.innerWidth <= 900) {
+                setTimeout(() => {
+                    btn.scrollIntoView({behavior: 'smooth', block: 'center'});
+                }, 300);
+            }
+        }
+        
+        // Uppdatera meny-knappens text på mobil
+        if (window.innerWidth <= 900) {
+            const menuBtn = document.querySelector('.menu-toggle');
+            menuBtn.textContent = '✕ Stäng lista';
+        }
+    }
+
     function loadKurdish(id, name, url, btn) {
         const player = document.getElementById('player');
         const nameEl = document.getElementById('channelName');
         
-        // För HLS streams, använd en HLS-spelare eller direkt länk
-        // Vi använder en enkel iframe med direkt URL
-        const newSrc = url;
+        // För webbplatser som Sahar TV, Ava TV, UTV Hawler - använd en iframe med hemsidan
+        // För HLS streams - använd direkt länken
+        let newSrc = url;
+        
+        // Kolla om det är en webbplats (innehåller http/https men inte .m3u8)
+        if (url.includes('http') && !url.includes('.m3u8') && !url.includes('/hls/')) {
+            // Det är en hemsida, använd direkt som iframe
+            newSrc = url;
+        }
         
         player.src = newSrc;
         nameEl.textContent = name;
@@ -951,6 +985,9 @@
                 } else if (onclickAttr.includes('loadKurdish(')) {
                     const m = onclickAttr.match(/loadKurdish\(['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]/);
                     id = m ? 'kurdish_' + m[1] : `kurdish_${index}`;
+                } else if (onclickAttr.includes('loadIfilm(')) {
+                    const m = onclickAttr.match(/loadIfilm\(['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]/);
+                    id = m ? 'ifilm_' + m[1] : `ifilm_${index}`;
                 } else if (onclickAttr.includes('openKarwanLink(')) {
                     const m = onclickAttr.match(/openKarwanLink\(['"]([^'"]+)['"]/);
                     id = m ? 'karwan_' + m[1].toLowerCase().replace(/[^a-z0-9]/g, '') : `karwan_${index}`;
@@ -1014,6 +1051,7 @@
     // Exponera funktioner för globalt bruk
     window.toggleFav = toggleFav;
     window.load = load;
+    window.loadIfilm = loadIfilm;
     window.loadKurdish = loadKurdish;
     window.openKarwanLink = openKarwanLink;
     window.filterChannels = filterChannels;
